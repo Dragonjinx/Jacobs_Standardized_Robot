@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <node name="actuation" pkg="sr_pkg" type="actuate_arm.py" output="screen"/>
+  <node name="manual_gui" pkg="sr_pkg" type="manual_xyz.py" />
+</launch>
