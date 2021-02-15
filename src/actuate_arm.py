@@ -5,8 +5,8 @@ from sympy import *
 import numpy as np
 import serial
 
-#ser = serial.Serial('/dev/ttyUSB0')
-#ser.flush()
+ser = serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=1)
+ser.flush()
 
 def Jrotz(theta):
     M=Matrix([[cos(theta), -1*sin(theta), 0, 0], [sin(theta), cos(theta), 0, 0], [0,0,1,0], [0,0,0,1]])
@@ -127,7 +127,7 @@ def callback(target):
     q_final=inverse(target_x, target_y, target_z)
     q_final_string=str(q_final[0])+'q'+str(q_final[1])+'q'+str(q_final[2])+'q'+str(q_final[3])+'q'+str(q_final[4])+'q'
     rospy.loginfo(q_final_string)
-    #ser.write(q_final_string.encode('utf-8'))
+    ser.write(q_final_string.encode('utf-8'))
 
 rospy.init_node('actuation')
 reverse_sub=rospy.Subscriber('pose', Pose, callback=callback)
