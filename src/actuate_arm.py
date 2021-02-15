@@ -125,8 +125,9 @@ def callback(target):
     target_y=target.position.y
     target_z=target.position.z
     q_final=inverse(target_x, target_y, target_z)
-    rospy.loginfo(q_final)
-    #ser.write(q_final.encode('utf-8'))
+    q_final_string=str(q_final[0])+'q'+str(q_final[1])+'q'+str(q_final[2])+'q'+str(q_final[3])+'q'+str(q_final[4])+'q'
+    rospy.loginfo(q_final_string)
+    #ser.write(q_final_string.encode('utf-8'))
 
 rospy.init_node('actuation')
 reverse_sub=rospy.Subscriber('pose', Pose, callback=callback)
