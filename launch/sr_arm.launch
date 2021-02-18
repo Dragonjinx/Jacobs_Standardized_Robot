@@ -2,4 +2,5 @@
 <launch>
   <node name="actuation" pkg="sr_pkg" type="actuate_arm.py" output="screen"/>
   <node name="manual_gui" pkg="sr_pkg" type="manual_xyz.py" />
+  <node name="serial_messenger" pkg="sr_pkg" type="serial_comm.py" output="screen"/>
 </launch>

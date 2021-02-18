@@ -3,10 +3,7 @@ import rospy
 from geometry_msgs.msg import Pose
 from sympy import *
 import numpy as np
-import serial
-
-ser = serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=1)
-ser.flush()
+from std_msgs.msg import String
 
 def Jrotz(theta):
     M=Matrix([[cos(theta), -1*sin(theta), 0, 0], [sin(theta), cos(theta), 0, 0], [0,0,1,0], [0,0,0,1]])
@@ -125,11 +122,13 @@ def callback(target):
     target_y=target.position.y
     target_z=target.position.z
     q_final=inverse(target_x, target_y, target_z)
+    q_final=q_final.astype(int)
     q_final_string=str(q_final[0])+'q'+str(q_final[1])+'q'+str(q_final[2])+'q'+str(q_final[3])+'q'+str(q_final[4])+'q'
     rospy.loginfo(q_final_string)
-    ser.write(q_final_string.encode('utf-8'))
+    serial_pub.publish(q_final_string)
 
 rospy.init_node('actuation')
+serial_pub=rospy.Publisher('serial_commands', String, queue_size=5)
 reverse_sub=rospy.Subscriber('pose', Pose, callback=callback)
 
 while True:

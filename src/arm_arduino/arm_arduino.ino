@@ -13,10 +13,11 @@ Servo r_5;**/
 
 String q="";
 int i=0;
-double q_final[5];
+int q_final[5];
 int j=0;
 int k=0;
-String q_part="";
+char* q_split=NULL;
+bool newq;
 
 void setup() {
   Serial.begin(9600);
@@ -30,25 +31,18 @@ void setup() {
 void loop() {
   if (Serial.available()){
     q=Serial.readStringUntil('\n');
-    Serial.println(q);
-  } else{
-    Serial.println(1);
+    newq=true;
   }
-  while(q[i]!='\n'){
-    if(q[i]=='q'){
-      q_final[k]=q_part.toDouble();
-      k+=1;
-      j=0;
-      q_part="";
-    }
-    else{
-      q_part[j]=q[i];
-      j+=1;
-    }
-    i+=1;
+  q_split=strtok(const_cast<char*>(q.c_str()),"q");
+  
+  q_final[i]=atoi(q_split);
+  if (newq){Serial.println(q_final[i]);}
+  while (q_split!= NULL && newq)
+  {
+    i++;
+    q_split=strtok(NULL,"q");
+    q_final[i]=atoi(q_split);
   }
-  for(int index = 0; index < 5; index++){
-    Serial.println(q_final[index]);
-  }
-
+  i=0;
+  q="";
 }
