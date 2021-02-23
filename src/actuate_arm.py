@@ -4,6 +4,7 @@ from geometry_msgs.msg import Pose
 from sympy import *
 import numpy as np
 from std_msgs.msg import String
+import time
 
 def Jrotz(theta):
     M=Matrix([[cos(theta), -1*sin(theta), 0, 0], [sin(theta), cos(theta), 0, 0], [0,0,1,0], [0,0,0,1]])
@@ -95,24 +96,39 @@ def inverse(target_x, target_y, target_z):
     q=np.array([0,0,0,0,0], dtype=float)
 
     error=np.linalg.norm(target-F_q)
+    closest=q
+    lowest=error
     rospy.loginfo(error)
-
-    while(error>1):
-        Jt_subbed=Jt_subbed.subs([(cos, np.cos), (sin, np.sin), (l1, l_1), (l2,l_2), (l3, l_3), (l4,l_4), (l5,l_5), (l6,l_6), (r1,q[0]), (r2,q[1]), (r3,q[2]), (r4,q[3]), (r5,q[4])])
-        Jt_np=np.array(Jt_subbed).astype(np.float64)
-        F_q=forward(np.array([l_1, l_2, l_3, l_4, l_5, l_6, q[0], q[1], q[2], q[3], q[4]]))
-        #print(Jt_np@(target-F_q))
-        adjustment=np.reshape([0.001*Jt_np@(target-F_q)], (5,))
-        q+=adjustment
-        error=np.linalg.norm(target-F_q)
-        rospy.loginfo(error)
+    i=0
+    while(i<4):
+        q=np.array([i*np.pi/2,i*np.pi/2,i*np.pi/2,i*np.pi/2,i*np.pi/2], dtype=float)
+        start=time.time()
+        while(error>1):
+            Jt_subbed=Jt_subbed.subs([(cos, np.cos), (sin, np.sin), (l1, l_1), (l2,l_2), (l3, l_3), (l4,l_4), (l5,l_5), (l6,l_6), (r1,q[0]), (r2,q[1]), (r3,q[2]), (r4,q[3]), (r5,q[4])])
+            Jt_np=np.array(Jt_subbed).astype(np.float64)
+            F_q=forward(np.array([l_1, l_2, l_3, l_4, l_5, l_6, q[0], q[1], q[2], q[3], q[4]]))
+            #print(Jt_np@(target-F_q))
+            adjustment=np.reshape([0.001*Jt_np@(target-F_q)], (5,))
+            q+=adjustment
+            error=np.linalg.norm(target-F_q)
+            if error<lowest:
+                lowest=error
+                closest=q
+                seed_nm=i
+            now=time.time()
+            rospy.loginfo(error)
+            if now - start > 15:
+                break
+        i+=1
 
     #print(position)
     #print(Jacobian)
     #print(Jacobian.shape)
-    q_final=np.radians(np.mod(np.degrees(q),360))
-    rospy.loginfo(np.radians(np.mod(np.degrees(q),360)))
-    rospy.loginfo(np.mod(np.degrees(q),360))
+    q_final=np.radians(np.mod(np.degrees(closest),360))
+    rospy.loginfo(np.radians(np.mod(np.degrees(closest),360)))
+    rospy.loginfo(np.mod(np.degrees(closest),360))
+    rospy.loginfo(lowest)
+    rospy.loginfo(seed_nm)
 
     rospy.loginfo(forward(np.array([l_1, l_2, l_3, l_4, l_5, l_6, q_final[0], q_final[1], q_final[2], q_final[3], q_final[4]])))
     return np.degrees(q_final)
