@@ -73,12 +73,13 @@ RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 #Move files into the workspace and build
 RUN cd ~/
 RUN git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git \
-    && /bin/bash -c 'git checkout Docker'
+    && cd ./Jacobs_Standardized_Robot \
+    && git checkout Docker
 
-RUN cp -r ~/Jacobs_Standardized_Robot/Std_Robo ~/catkin_ws/src/sr_pkg/
-RUN cd ~/catkin_ws
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
-RUN /bin/bash -c "source ~/.bashrc"
+#RUN cp -r ~/Jacobs_Standardized_Robot/Std_Robo ~/catkin_ws/src/sr_pkg/
+#RUN cd ~/catkin_ws
+#RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
+#RUN /bin/bash -c "source ~/.bashrc"
 
 #Build the rosnode in the workspace
 CMD ["/bin/bash"]
