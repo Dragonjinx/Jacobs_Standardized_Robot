@@ -108,7 +108,7 @@ def inverse(target_x, target_y, target_z):
             Jt_np=np.array(Jt_subbed).astype(np.float64)
             F_q=forward(np.array([l_1, l_2, l_3, l_4, l_5, l_6, q[0], q[1], q[2], q[3], q[4]]))
             #print(Jt_np@(target-F_q))
-            adjustment=np.reshape([0.01*Jt_np@(target-F_q)], (5,))
+            adjustment=np.reshape([0.001*Jt_np@(target-F_q)], (5,))
             q+=adjustment
             error=np.linalg.norm(target-F_q)
             if error<lowest:
