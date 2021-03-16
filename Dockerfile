@@ -21,6 +21,9 @@ RUN apt update && apt install --no-install-recommends -y \
     python3-rosinstall-generator \
     python3-wstool \
     build-essential \
+    python3-sympy \
+    python3-numpy \
+    python3-pyqt5 \
     && rm -rf /var/lib/apt/lists/*
 
 #initialize rosdep
@@ -62,9 +65,8 @@ RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 #Move files into the workspace and build
 RUN cd ~/
-RUN /bin/bash -c 'git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git ~/Jacobs_Standardized_Robot' \
-RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker' \
-RUN cp -r ~/Jacobs_Standardized_Robot/Std_Robo ~/catkin_ws/src/sr_pkg/
+RUN /bin/bash -c 'git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git ~/Jacobs_Standardized_Robot'
+RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker; mv Std_Robo/ ~/catkin_ws/src/sr_pkg'
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
 RUN /bin/bash -c "source ~/.bashrc"
 
