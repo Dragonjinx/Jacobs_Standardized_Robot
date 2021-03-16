@@ -37,26 +37,16 @@ RUN apt update && apt install -y --no-install-recommends \
     && apt autoremove \
     && rm -rf /var/lib/apt/lists/*
 
+
 #Setup ros user (maybe optional)
-#ADD startcontainer /usr/local/bin/startcontainer
-#RUN chmod 755 /usr/local/bin/startcontainer
 
-#RUN adduser --gecos "ROS User" --disabled-password ros
-#RUN usermod -a -G dialout ros
+# ADD startcontainer /root/startcontainer
 
-# I don't understand after this
-#RUN mkdir /var/run/sshd
 
-#ADD 99_aptget /etc/sudoers.d/99_aptget
-#RUN chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_aptget
-
-#RUN echo "    ForwardX11Trusted yes\n" >> /etc/ssh/ssh_config
-
-#select created user
-#USER $USER
-
-#set custom home to the user
 RUN HOME=~/ rosdep update
+RUN echo $(ls $HOME)
+
+#option to add user
 
 #Create a catkin workspace
 RUN mkdir -p ~/catkin_ws/src
@@ -72,15 +62,11 @@ RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 #Move files into the workspace and build
 RUN cd ~/
-RUN git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git \
-    && cd ./Jacobs_Standardized_Robot \
-    && git checkout Docker
-
-#RUN cp -r ~/Jacobs_Standardized_Robot/Std_Robo ~/catkin_ws/src/sr_pkg/
-#RUN cd ~/catkin_ws
-#RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
-#RUN /bin/bash -c "source ~/.bashrc"
+RUN /bin/bash -c 'git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git ~/Jacobs_Standardized_Robot' \
+RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker' \
+RUN cp -r ~/Jacobs_Standardized_Robot/Std_Robo ~/catkin_ws/src/sr_pkg/
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
+RUN /bin/bash -c "source ~/.bashrc"
 
 #Build the rosnode in the workspace
 CMD ["/bin/bash"]
-ENTRYPOINT ["/usr/local/bin/startcontainer"]
