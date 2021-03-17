@@ -24,7 +24,6 @@ RUN apt update && apt install --no-install-recommends -y \
     python3-sympy \
     python3-numpy \
     python3-pyqt5 \
-    && pip3 install pyserial \
     && rm -rf /var/lib/apt/lists/*
 
 #initialize rosdep
