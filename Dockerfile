@@ -3,7 +3,8 @@ FROM ros:noetic-ros-core-focal
 #setup ros prerequisites
 RUN apt update && apt install --no-install-recommends -y \
     python3 \
-    git
+    git \
+    lsusb
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'\
     sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
@@ -16,6 +17,7 @@ RUN apt update && apt install -y --no-install-recommends \
 
 #workspace build prerequisites
 RUN apt update && apt install --no-install-recommends -y \
+    apt install arduino-mk \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
@@ -71,6 +73,15 @@ RUN /bin/bash -c 'git clone https://github.com/Dragonjinx/Jacobs_Standardized_Ro
 RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker; mv Std_Robo/ ~/catkin_ws/src/sr_pkg'
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
 RUN /bin/bash -c "source ~/.bashrc"
+
+# Server library downloaded from the arduino libraries:
+# RUN /bin/bash -c 'cd ~/catkin_ws/src/sr_pkg/src/arm_arduino;\
+#     git init;\
+#     git config core.sparseCheckout true;\
+#     git remote add -f origin https://github.com/arduino-libraries/Servo;\
+#     echo "src"> .git/info/sparse-checkout;\
+#     git pull origin master;\
+#     mv ./src ./'
 
 #Build the rosnode in the workspace
 CMD ["/bin/bash"]
