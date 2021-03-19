@@ -17,7 +17,7 @@ RUN apt update && apt install -y --no-install-recommends \
 
 #workspace build prerequisites
 RUN apt update && apt install --no-install-recommends -y \
-    apt install arduino-mk \
+    arduino-mk \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
