@@ -70,6 +70,9 @@ RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 #Move files into the workspace and build
 RUN cd ~/
 RUN /bin/bash -c 'git clone https://github.com/Dragonjinx/Jacobs_Standardized_Robot.git ~/Jacobs_Standardized_Robot'
+#Move scripts
+RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker; mv Std_Robo/*.sh ~/'
+#Move sketches
 RUN /bin/bash -c 'cd ~/Jacobs_Standardized_Robot; git checkout Docker; mv Std_Robo/ ~/catkin_ws/src/sr_pkg'
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws; catkin_make'
 RUN /bin/bash -c "source ~/.bashrc"
