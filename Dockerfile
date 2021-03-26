@@ -87,4 +87,9 @@ RUN /bin/bash -c "source ~/.bashrc"
 #     mv ./src ./'
 
 #Build the rosnode in the workspace
+
+#Add automatic upload to arduino for entrypoint script
+
+#Add automatic roslaunch to entrypoint script
+
 CMD ["/bin/bash"]
