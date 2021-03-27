@@ -3,7 +3,7 @@ import rospy
 from geometry_msgs.msg import Pose
 import sys, time
 
-rospy.init_node("manual_cli")
+rospy.init_node("manual_gui")
 xyz_pub=rospy.Publisher('pose', Pose, queue_size=1)
 
 while 1:

@@ -33,7 +33,16 @@ void loop() {
     q=Serial.readStringUntil('\n');
     newq=true;
   }
-  Serial.print(q);
+  q_split=strtok(const_cast<char*>(q.c_str()),"q");
+  
+  q_final[i]=atoi(q_split);
+  if (newq){Serial.println(q_final[i]);}
+  while (q_split!= NULL && newq)
+  {
+    i++;
+    q_split=strtok(NULL,"q");
+    q_final[i]=atoi(q_split);
+  }
   i=0;
   q="";
 }
