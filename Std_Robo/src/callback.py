@@ -11,7 +11,7 @@ def callback(target):
     final_string = ("This is a default string given by your rosnode" +\
         "\nYour X: " + str(target.position.x) + \
         "\nYour Y: " + str(target.position.y) + \
-        "\nYour Z: " + str(target.position.z))
+        "\nYour Z: " + str(target.position.z) + ";")
 
     rospy.loginfo(final_string)
     serial_pub.publish(final_string)
