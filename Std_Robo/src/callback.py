@@ -20,5 +20,4 @@ rospy.init_node('callback')
 serial_pub=rospy.Publisher('serial_commands', String, queue_size=5)
 reverse_sub=rospy.Subscriber('pose', Pose, callback=callback)
 
-while True:
-    rospy.spin()
+rospy.spin()

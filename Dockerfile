@@ -92,4 +92,6 @@ RUN /bin/bash -c "source ~/.bashrc"
 
 #Add automatic roslaunch to entrypoint script
 
+
+
 CMD ["/bin/bash"]

@@ -12,5 +12,4 @@ def callback(message):
 rospy.init_node('serial_messenger')
 rospy.Subscriber('serial_commands',String, callback=callback)
 
-while True:
-    rospy.spin()
+rospy.spin()
